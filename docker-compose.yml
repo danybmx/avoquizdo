@@ -1,0 +1,34 @@
+version: "3"
+services:
+  database:
+    image: mongo:latest
+    volumes:
+      - database:/data/db
+      - database_config:/data/configdb
+  server:
+    build:
+      context: ./server
+    ports:
+      - 8080:8080
+    environment:
+      DATABASE_URI: "mongodb://database:27017/avoquizdo"
+      PORT: "8080"
+  game:
+    build:
+      context: ./game
+      args:
+        - "REACT_APP_GAME_URL=http://localhost:8000"
+        - "REACT_APP_GAME_WS_URL=ws://localhost:8080/ws"
+    ports:
+      - 8000:80
+  manager:
+    build:
+      context: ./manager
+      args:
+        - "REACT_APP_API_URL=http://localhost:8080"
+        - "REACT_APP_GAME_URL=http://localhost:8000"
+    ports:
+      - 8001:80
+volumes:
+  database:
+  database_config:

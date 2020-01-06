@@ -1,0 +1,26 @@
+sequenceDiagram
+    participant Host
+    participant Player
+    participant Server
+    Host->>+Server: Connect
+    Server-->>Host: Connected
+    Host->>Server: Create
+    Server-->>Host: Created
+    Player->>+Server: Connect
+    Server-->>Player: Connected
+    Server->>Host: Players
+    Host->>Server: Start game
+    Server->>Host: Start game countdown
+    Server->>Player: Start game countdown
+    loop All the quiz questions
+        Server->>Host: Question
+        Server->>Player: Question
+        Player->>Server: Answer
+        Server->>Host: Game status
+        Server->>Host: Current results
+        Server->>Player: Current player results
+    end
+    Server->>Host: Final result
+    Server->>Player: Player final result
+    Server->>-Player: Goodbye
+    Server->>-Host: Goodbye
